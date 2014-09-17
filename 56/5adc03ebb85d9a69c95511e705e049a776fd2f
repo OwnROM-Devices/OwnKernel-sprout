@@ -1,0 +1,7 @@
+Code-Review+2: Alexander Levitskiy <sanek@google.com>
+Verified+1: Dmitry Shmidt <dimitrysh%android.com@gtempaccount.com>
+Submitted-by: Dmitry Shmidt <dimitrysh%android.com@gtempaccount.com>
+Submitted-at: Tue, 24 Jun 2014 16:59:15 +0000
+Reviewed-on: https://android-review.googlesource.com/99231
+Project: kernel/mediatek
+Branch: refs/heads/android-3.4
