@@ -32,6 +32,9 @@
 #include <linux/swap.h>
 #include <linux/mm_types.h>
 #include <linux/dma-contiguous.h>
+#include <linux/dma-removed.h>
+#include <trace/events/kmem.h>
+#include <linux/delay.h>
 
 struct cma {
 	unsigned long	base_pfn;
@@ -308,8 +311,9 @@ struct page *dma_alloc_from_contiguous(struct device *dev, int count,
 {
 	unsigned long mask, pfn, pageno, start = 0;
 	struct cma *cma = dev_get_cma_area(dev);
-	struct page *page = NULL;
-	int ret;
+	int ret = 0;
+	int tries = 0;
+	int retry_after_sleep = 0;
 
 	if (!cma || !cma->count)
 		return NULL;
@@ -330,8 +334,29 @@ struct page *dma_alloc_from_contiguous(struct device *dev, int count,
 	for (;;) {
 		pageno = bitmap_find_next_zero_area(cma->bitmap, cma->count,
 						    start, count, mask);
-		if (pageno >= cma->count)
-			break;
+		if (pageno >= cma->count) {
+			if (retry_after_sleep == 0) {
+				pfn = 0;
+				start = 0;
+				pr_debug("%s: Memory range busy,"
+					"retry after sleep\n", __func__);
+				msleep(100);
+				retry_after_sleep = 1;
+				mutex_unlock(&cma->lock);
+				continue;
+			} else {
+				pfn = 0;
+				mutex_unlock(&cma->lock);
+				break;
+			}
+		}
+		bitmap_set(cma->bitmap, pageno, count);
+		/*
+		 * It's safe to drop the lock here. We've marked this region for
+		 * our exclusive use. If the migration fails we will take the
+		 * lock again and unmark it.
+		 */
+		mutex_unlock(&cma->lock);
 
 		pfn = cma->base_pfn + pageno;
 		ret = alloc_contig_range(pfn, pfn + count, MIGRATE_CMA);
