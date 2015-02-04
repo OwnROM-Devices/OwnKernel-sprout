@@ -423,6 +423,29 @@ struct mmc_host {
 #ifdef CONFIG_MTK_EMMC_CACHE
 	struct mmc_flush_info	flush_info;
 #endif
+	struct {
+		unsigned long	busy_time_us;
+		unsigned long	window_time;
+		unsigned long	curr_freq;
+		unsigned long	polling_delay_ms;
+		unsigned int	up_threshold;
+		unsigned int	down_threshold;
+		ktime_t		start_busy;
+		bool		enable;
+		bool		initialized;
+		bool		in_progress;
+		/* freq. transitions are not allowed in invalid state */
+		bool		invalid_state;
+		struct delayed_work work;
+		enum mmc_load	state;
+	} clk_scaling;
+	enum dev_state dev_status;
+	/*
+	 * Set to 1 to just stop the SDCLK to the card without
+	 * actually disabling the clock from it's source.
+	 */
+	bool			card_clock_off;
+	bool			wakeup_on_idle;
 	unsigned long		private[0] ____cacheline_aligned;
 };
 
