@@ -1,0 +1,7 @@
+Code-Review+2: JP Abgrall <jpa@google.com>
+Verified+1: Greg Hackmann <ghackmann@google.com>
+Submitted-by: Greg Hackmann <ghackmann@google.com>
+Submitted-at: Fri, 13 Jun 2014 19:41:10 +0000
+Reviewed-on: https://android-review.googlesource.com/97705
+Project: kernel/mediatek
+Branch: refs/heads/android-3.10

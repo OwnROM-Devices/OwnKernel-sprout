@@ -1,0 +1,7 @@
+Code-Review+2: dmitriyz <dmitriyz@google.com>
+Verified+1: Colin Cross <ccross@google.com>
+Submitted-by: Colin Cross <ccross@google.com>
+Submitted-at: Fri, 08 Nov 2013 00:03:03 +0000
+Reviewed-on: https://android-review.googlesource.com/69636
+Project: kernel/mediatek
+Branch: refs/heads/android-3.10

@@ -1,0 +1,8 @@
+Code-Review+1: Jon Mayo <jmayo@nvidia.com>
+Code-Review+2: dmitriyz <dmitriyz@google.com>
+Verified+1: Greg Hackmann <ghackmann@google.com>
+Submitted-by: Greg Hackmann <ghackmann@google.com>
+Submitted-at: Fri, 22 Nov 2013 23:32:21 +0000
+Reviewed-on: https://android-review.googlesource.com/70461
+Project: kernel/mediatek
+Branch: refs/heads/android-3.10

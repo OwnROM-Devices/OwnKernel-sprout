@@ -1,0 +1,7 @@
+Code-Review+2: Colin Cross <ccross@google.com>
+Verified+1: Greg Hackmann <ghackmann@google.com>
+Submitted-by: Greg Hackmann <ghackmann@google.com>
+Submitted-at: Mon, 18 Aug 2014 20:23:20 +0000
+Reviewed-on: https://android-review.googlesource.com/104623
+Project: kernel/mediatek
+Branch: refs/heads/android-3.10

@@ -1,0 +1,9 @@
+Code-Review+1: Todd Poynor <toddpoynor@google.com>
+Code-Review+1: Robert Sesek <rsesek@google.com>
+Code-Review+2: JP Abgrall <jpa@google.com>
+Verified+1: JP Abgrall <jpa@google.com>
+Submitted-by: JP Abgrall <jpa@google.com>
+Submitted-at: Mon, 13 Oct 2014 19:37:03 +0000
+Reviewed-on: https://android-review.googlesource.com/110269
+Project: kernel/mediatek
+Branch: refs/heads/android-3.10
