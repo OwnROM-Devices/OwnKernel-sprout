@@ -2,6 +2,7 @@
  # Copyright © 2015, Varun Chitre "varun.chitre15" <varun.chitre15@gmail.com>
  #
  # Custom build script
+ # Modified by Akhil Narang for OwnKernel
  #
  # This software is licensed under the terms of the GNU General Public
  # License version 2, as published by the Free Software Foundation, and
@@ -23,19 +24,19 @@ yellow='\033[0;33m'
 red='\033[0;31m'
 nocol='\033[0m'
 # Modify the following variable if you want to build
-export CROSS_COMPILE="/root/cm12.1/prebuilts/gcc/linux-x86/arm/arm-eabi-4.8/bin/arm-eabi-"
+export CROSS_COMPILE="/home/akhil/android/arm-cortex_a7-linux-gnueabihf-linaro_4.9.3-2015.03/bin/arm-cortex_a7-linux-gnueabihf-"
 export ARCH=arm
 export SUBARCH=arm
-export KBUILD_BUILD_USER="varun.chitre15"
-export KBUILD_BUILD_HOST="Monster-Machine"
+export KBUILD_BUILD_USER="akhilnarang"
+export KBUILD_BUILD_HOST="Insomniac"
 
 compile_kernel ()
 {
 echo -e "$blue***********************************************"
-echo "          Compiling ThunderZap kernel          "
+echo "          Compiling OwnKernel          "
 echo -e "***********************************************$nocol"
 make sprout_defconfig
-make -j32
+make -j12
 if ! [ -a $ZIMAGE ];
 then
 echo -e "$red Kernel Compilation failed! Fix the errors! $nocol"
