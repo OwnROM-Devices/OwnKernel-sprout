@@ -14,7 +14,7 @@
  #
  # Please maintain this if you use this script or any part of it
  #
-./colours
+./colors
 dir=$PWD
 op=$dir/arch/arm/boot/zImage
 START=$(date +"%s")
@@ -59,6 +59,7 @@ cleanbuild)
 make clean mrproper
 rm -f include/linux/autoconf.h
 compile_kernel
+;;
 *)
 compile_kernel
 ;;
