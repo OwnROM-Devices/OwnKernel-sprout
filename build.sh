@@ -14,15 +14,30 @@
  #
  # Please maintain this if you use this script or any part of it
  #
-./colors
 dir=$PWD
 op=$dir/arch/arm/boot/zImage
 START=$(date +"%s")
-blue='\033[0;34m'
-cyan='\033[0;36m'
-yellow='\033[0;33m'
-red='\033[0;31m'
-nocol='\033[0m'
+red=$(tput setaf 1)             #  red
+grn=$(tput setaf 2)             #  green
+ylw=$(tput setaf 3)             #  yellow
+blu=$(tput setaf 4)             #  blue
+ppl=$(tput setaf 5)             #  purple
+cya=$(tput setaf 6)             #  cyan
+txtbld=$(tput bold)             #  Bold
+bldred=${txtbld}$(tput setaf 1) #  red
+bldgrn=${txtbld}$(tput setaf 2) #  green
+bldylw=${txtbld}$(tput setaf 3) #  yellow
+bldblu=${txtbld}$(tput setaf 4) #  blue
+bldppl=${txtbld}$(tput setaf 5) #  purple
+bldcya=${txtbld}$(tput setaf 6) #  cyan
+txtrst=$(tput sgr0)             #  Reset
+rev=$(tput rev)                 #  Reverse color
+pplrev=${rev}$(tput setaf 5)
+cyarev=${rev}$(tput setaf 6)
+ylwrev=${rev}$(tput setaf 3)
+blurev=${rev}$(tput setaf 4)
+normal='tput sgr0'
+
 # Modify the following variable if you want to build
 export CROSS_COMPILE="/home/akhil/android/arm-cortex_a7-linux-gnueabihf-linaro_4.9.3-2015.03/bin/arm-cortex_a7-linux-gnueabihf-"
 export ARCH=arm
@@ -32,14 +47,14 @@ export KBUILD_BUILD_HOST="Give-This-Sleepless-Laptop-A-Break"
 
 compile_kernel ()
 {
-echo -e "$bldblu***********************************************"
+echo -e "$cyarev***********************************************"
 echo "          Compiling OwnKernel          "
 echo -e "***********************************************$nocol"
 make sprout_defconfig
 make -j12
 if [ ! -e $op ]
 then
-echo -e "$bldred Kernel Compilation failed! Fix the errors! $nocol"
+echo -e "$cyarev Kernel Compilation failed! Fix the errors! $nocol"
 exit
 fi
 }
@@ -66,4 +81,4 @@ compile_kernel
 esac
 END=$(date +"%s")
 DIFF=$(($END - $START))
-echo -e "$bldcya OwnKernel Build completed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.$nocol"
+echo -e "$cyarev OwnKernel Build completed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.$txtrst"
