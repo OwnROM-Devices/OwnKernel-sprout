@@ -51,7 +51,7 @@ echo -e "$cyarev***********************************************"
 echo "          Compiling OwnKernel          "
 echo -e "***********************************************$nocol"
 make sprout_defconfig
-make -j12
+make -j8
 if [ ! -e $op ]
 then
 echo -e "$cyarev Kernel Compilation failed! Fix the errors! $nocol"
