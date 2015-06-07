@@ -43,7 +43,7 @@ export CROSS_COMPILE="/home/akhil/android/arm-cortex_a7-linux-gnueabihf-linaro_4
 export ARCH=arm
 export SUBARCH=arm
 export KBUILD_BUILD_USER="akhilnarang"
-export KBUILD_BUILD_HOST="Sleeply-PC"
+export KBUILD_BUILD_HOST="Sleepy-PC"
 
 compile_kernel ()
 {
