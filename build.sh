@@ -60,7 +60,6 @@ fi
 if [ ! -e $op ]
 then
 echo -e "$cyarev Kernel Compilation failed! Fix the errors! $nocol"
-exit
 fi
 }
 
