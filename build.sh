@@ -43,7 +43,7 @@ export CROSS_COMPILE="/home/akhil/android/arm-cortex_a7-linux-gnueabihf-linaro_4
 export ARCH=arm
 export SUBARCH=arm
 export KBUILD_BUILD_USER="akhilnarang"
-export KBUILD_BUILD_HOST="Give-This-Sleepless-Laptop-A-Break"
+export KBUILD_BUILD_HOST="Sleeply-PC"
 
 compile_kernel ()
 {
@@ -51,7 +51,12 @@ echo -e "$cyarev***********************************************"
 echo "          Compiling OwnKernel          "
 echo -e "***********************************************$nocol"
 make sprout_defconfig
+if [ "$1" == "test" ]
+then
+make
+else
 make -j8
+fi
 if [ ! -e $op ]
 then
 echo -e "$cyarev Kernel Compilation failed! Fix the errors! $nocol"
@@ -75,9 +80,11 @@ make clean mrproper
 rm -f include/linux/autoconf.h
 compile_kernel
 ;;
+test)
+compile_kernel test
+;;
 *)
 compile_kernel
-;;
 esac
 END=$(date +"%s")
 DIFF=$(($END - $START))
