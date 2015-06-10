@@ -39,7 +39,12 @@ blurev=${rev}$(tput setaf 4)
 normal='tput sgr0'
 
 # Modify the following variable if you want to build
+if [ ! "$2" == "gcc5.1" ]
+then
 export CROSS_COMPILE="/home/akhil/android/arm-cortex_a7-linux-gnueabihf-linaro_4.9.3-2015.03/bin/arm-cortex_a7-linux-gnueabihf-"
+else
+export CROSS_COMPILE="/home/akhil/android/arm-eabi-5.1/bin/arm-eabi"
+fi
 export ARCH=arm
 export SUBARCH=arm
 export KBUILD_BUILD_USER="akhilnarang"
