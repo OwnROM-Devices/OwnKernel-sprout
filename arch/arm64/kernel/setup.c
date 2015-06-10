@@ -453,14 +453,7 @@ static int c_show(struct seq_file *m, void *v)
 		seq_printf(m, "BogoMIPS\t: %lu.%02lu\n",
 			   loops_per_jiffy / (500000UL/HZ),
 			   loops_per_jiffy / (5000UL/HZ) % 100);
-	}
 
-	/* dump out the processor features */
-	seq_puts(m, "Features\t: ");
-
-	for (i = 0; hwcap_str[i]; i++)
-		if (elf_hwcap & (1 << i))
-			seq_printf(m, "%s ", hwcap_str[i]);
 #ifdef CONFIG_ARMV7_COMPAT_CPUINFO
 	if (is_compat_task()) {
 		/* Print out the non-optional ARMv8 HW capabilities */
@@ -469,19 +462,35 @@ static int c_show(struct seq_file *m, void *v)
 	}
 #endif
 
-	seq_printf(m, "\nCPU implementer\t: 0x%02x\n", read_cpuid_id() >> 24);
-	seq_printf(m, "CPU architecture: %s\n",
 #if IS_ENABLED(CONFIG_ARMV7_COMPAT_CPUINFO)
 			is_compat_task() ? "8" :
 #endif
-			"AArch64");
-	seq_printf(m, "CPU variant\t: 0x%x\n", (read_cpuid_id() >> 20) & 15);
-	seq_printf(m, "CPU part\t: 0x%03x\n", (read_cpuid_id() >> 4) & 0xfff);
-	seq_printf(m, "CPU revision\t: %d\n", read_cpuid_id() & 15);
+		/*
+		 * Dump out the common processor features in a single line.
+		 * Userspace should read the hwcaps with getauxval(AT_HWCAP)
+		 * rather than attempting to parse this, but there's a body of
+		 * software which does already (at least for 32-bit).
+		 */
+		seq_puts(m, "Features\t:");
+		if (personality(current->personality) == PER_LINUX32) {
+#ifdef CONFIG_COMPAT
+			for (j = 0; compat_hwcap_str[j]; j++)
+				if (COMPAT_ELF_HWCAP & (1 << j))
+					seq_printf(m, " %s", compat_hwcap_str[j]);
+#endif /* CONFIG_COMPAT */
+		} else {
+			for (j = 0; hwcap_str[j]; j++)
+				if (elf_hwcap & (1 << j))
+					seq_printf(m, " %s", hwcap_str[j]);
+		}
+		seq_puts(m, "\n");
 
-	seq_puts(m, "\n");
-
-	seq_printf(m, "Hardware\t: %s\n", machine_name);
+		seq_printf(m, "CPU implementer\t: 0x%02x\n", (midr >> 24));
+		seq_printf(m, "CPU architecture: 8\n");
+		seq_printf(m, "CPU variant\t: 0x%x\n", ((midr >> 20) & 0xf));
+		seq_printf(m, "CPU part\t: 0x%03x\n", ((midr >> 4) & 0xfff));
+		seq_printf(m, "CPU revision\t: %d\n\n", (midr & 0xf));
+	}
 
 	return 0;
 }
