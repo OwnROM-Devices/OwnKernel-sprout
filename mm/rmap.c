@@ -1710,7 +1710,8 @@ void __put_anon_vma(struct anon_vma *anon_vma)
  * rmap_walk() and its helpers rmap_walk_anon() and rmap_walk_file():
  * Called by migrate.c to remove migration ptes, but might be used more later.
  */
-static int rmap_walk_anon(struct page *page, struct rmap_walk_control *rwc)
+static int rmap_walk_anon(struct page *page, int (*rmap_one)(struct page *,
+		struct vm_area_struct *, unsigned long, void *), void *arg)
 {
 	struct anon_vma *anon_vma;
 	pgoff_t pgoff = page->index << (PAGE_CACHE_SHIFT - PAGE_SHIFT);
@@ -1730,7 +1731,7 @@ static int rmap_walk_anon(struct page *page, struct rmap_walk_control *rwc)
 	anon_vma_interval_tree_foreach(avc, &anon_vma->rb_root, pgoff, pgoff) {
 		struct vm_area_struct *vma = avc->vma;
 		unsigned long address = vma_address(page, vma);
-		ret = rwc->rmap_one(page, vma, address, rwc->arg);
+		ret = rmap_one(page, vma, address, arg);
 		if (ret != SWAP_AGAIN)
 			break;
 	}
@@ -1738,7 +1739,8 @@ static int rmap_walk_anon(struct page *page, struct rmap_walk_control *rwc)
 	return ret;
 }
 
-static int rmap_walk_file(struct page *page, struct rmap_walk_control *rwc)
+static int rmap_walk_file(struct page *page, int (*rmap_one)(struct page *,
+		struct vm_area_struct *, unsigned long, void *), void *arg)
 {
 	struct address_space *mapping = page->mapping;
 	pgoff_t pgoff = page->index << (PAGE_CACHE_SHIFT - PAGE_SHIFT);
@@ -1750,7 +1752,7 @@ static int rmap_walk_file(struct page *page, struct rmap_walk_control *rwc)
 	mutex_lock(&mapping->i_mmap_mutex);
 	vma_interval_tree_foreach(vma, &mapping->i_mmap, pgoff, pgoff) {
 		unsigned long address = vma_address(page, vma);
-		ret = rwc->rmap_one(page, vma, address, rwc->arg);
+		ret = rmap_one(page, vma, address, arg);
 		if (ret != SWAP_AGAIN)
 			break;
 	}
@@ -1763,16 +1765,17 @@ static int rmap_walk_file(struct page *page, struct rmap_walk_control *rwc)
 	return ret;
 }
 
-int rmap_walk(struct page *page, struct rmap_walk_control *rwc)
+int rmap_walk(struct page *page, int (*rmap_one)(struct page *,
+		struct vm_area_struct *, unsigned long, void *), void *arg)
 {
 	VM_BUG_ON(!PageLocked(page));
 
 	if (unlikely(PageKsm(page)))
-		return rmap_walk_ksm(page, rwc);
+		return rmap_walk_ksm(page, rmap_one, arg);
 	else if (PageAnon(page))
-		return rmap_walk_anon(page, rwc);
+		return rmap_walk_anon(page, rmap_one, arg);
 	else
-		return rmap_walk_file(page, rwc);
+		return rmap_walk_file(page, rmap_one, arg);
 }
 #endif /* CONFIG_MIGRATION */
 
