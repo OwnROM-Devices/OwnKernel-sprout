@@ -16,6 +16,9 @@
  #
 dir=$PWD
 op=$dir/arch/arm/boot/zImage
+okzip=$dir/ownkernel
+okversion="4.2"
+device="sprout"
 START=$(date +"%s")
 red=$(tput setaf 1)             #  red
 grn=$(tput setaf 2)             #  green
@@ -39,33 +42,44 @@ blurev=${rev}$(tput setaf 4)
 normal='tput sgr0'
 
 # Modify the following variable if you want to build
-if [ "$1" == "gcc5.1" ] || [ "$2" == "gcc5.1" ]
+if [ "$1" == "uber6" ] || [ "$2" == "gcc6" ]
 then
-export CROSS_COMPILE="/home/akhil/android/arm-eabi-5.1/bin/arm-eabi"
+export CROSS_COMPILE="/home/akhil/android/arm-eabi-6.0/bin/arm-eabi"
 else
 export CROSS_COMPILE="/home/akhil/android/arm-cortex_a7-linux-gnueabihf-linaro_4.9.3-2015.03/bin/arm-cortex_a7-linux-gnueabihf-"
 fi
 export ARCH=arm
 export SUBARCH=arm
 export KBUILD_BUILD_USER="akhilnarang"
-export KBUILD_BUILD_HOST="Sleepy-PC"
+export KBUILD_BUILD_HOST="OwnROM"
+
+
+zip_kernel ()
+{
+if [ -e "$op" ]
+then
+cp $op $okzip/tools/zImage
+cd $okzip
+zip -r9 ~/android/OwnKernel_$device-$okversion.zip *
+cd $dir
+else
+echo -e "$cyarev Kernel Compilation failed! Fix the errors! $nocol"
+fi
+}
 
 compile_kernel ()
 {
 echo -e "$cyarev***********************************************"
-echo "          Compiling OwnKernel          "
+echo "          Compiling OwnKernel $okversion for $device          "
 echo -e "***********************************************$nocol"
 make sprout_defconfig
-if [ "$1" == "test" ]
+if [ "$1" == "less" ]
 then
 make
 else
-make -j8
+make -j16
 fi
-if [ ! -e $op ]
-then
-echo -e "$cyarev Kernel Compilation failed! Fix the errors! $nocol"
-fi
+zip_kernel
 }
 
 case $1 in
@@ -84,12 +98,12 @@ make clean mrproper
 rm -f include/linux/autoconf.h
 compile_kernel
 ;;
-test)
-compile_kernel test
+less)
+compile_kernel less
 ;;
 *)
 compile_kernel
 esac
 END=$(date +"%s")
 DIFF=$(($END - $START))
-echo -e "$cyarev OwnKernel Build completed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.$txtrst"
+echo -e "$cyarev OwnKernel $okversion for $device Build completed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.$txtrst"
