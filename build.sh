@@ -17,7 +17,7 @@
 dir=$PWD
 op=$dir/arch/arm/boot/zImage
 okzip=$dir/ownkernel
-okversion="4.2"
+okversion="4.3"
 device="sprout"
 START=$(date +"%s")
 red=$(tput setaf 1)             #  red
@@ -42,7 +42,7 @@ blurev=${rev}$(tput setaf 4)
 normal='tput sgr0'
 
 # Modify the following variable if you want to build
-if [ "$1" == "uber6" ] || [ "$2" == "gcc6" ]
+if [ "$1" == "uber6" ] || [ "$2" == "uber6" ]
 then
 export CROSS_COMPILE="/home/akhil/android/arm-eabi-6.0/bin/arm-eabi"
 else
