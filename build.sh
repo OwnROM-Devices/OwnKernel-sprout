@@ -17,7 +17,7 @@
 dir=$PWD
 op=$dir/arch/arm/boot/zImage
 okzip=$dir/ownkernel
-okversion="4.3"
+okversion="4.4"
 device="sprout"
 START=$(date +"%s")
 red=$(tput setaf 1)             #  red
@@ -69,9 +69,17 @@ fi
 
 compile_kernel ()
 {
-echo -e "$cyarev***********************************************"
-echo "          Compiling OwnKernel $okversion for $device          "
-echo -e "***********************************************$nocol"
+echo $cyarev
+echo "    )                  )                       ";
+echo " ( /(               ( /(                   (   ";
+echo " )\()) (  (         )\()) (  (           ( )\  ";
+echo "((_)\  )\))(   (  |((_)\ ))\ )(   (     ))((_) ";
+echo "  ((_)((_)()\  )\ )_ ((_)((_|()\  )\ ) /((_)   ";
+echo " / _ \_(()((_)_(_/( |/ (_))  ((_)_(_/((_))| |  ";
+echo "| (_) \ V  V / ' \))' </ -_)| '_| ' \)) -_) |  ";
+echo " \___/ \_/\_/|_||_|_|\_\___||_| |_||_|\___|_|  ";
+echo "                                               ";
+echo $nocol
 make sprout_defconfig
 if [ "$1" == "less" ]
 then
