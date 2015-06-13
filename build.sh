@@ -53,18 +53,12 @@ export SUBARCH=arm
 export KBUILD_BUILD_USER="akhilnarang"
 export KBUILD_BUILD_HOST="OwnROM"
 
-
 zip_kernel ()
 {
-if [ -e "$op" ]
-then
 cp $op $okzip/tools/zImage
 cd $okzip
 zip -r9 ~/android/OwnKernel_$device-$okversion.zip *
 cd $dir
-else
-echo -e "$cyarev Kernel Compilation failed! Fix the errors! $nocol"
-fi
 }
 
 compile_kernel ()
@@ -87,7 +81,15 @@ echo $txtrst `make`
 else
 make -j16
 fi
+END=$(date +"%s")
+DIFF=$(($END - $START))
+if [ -e "$op" ]
+then
+echo -e "$cyarev OwnKernel $okversion for $device Build completed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.$txtrst"
 zip_kernel
+else
+echo -e "$cyarev OwnKernel $okversion for $device Build Failed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.$txtrst"
+fi
 }
 
 case $1 in
@@ -112,6 +114,3 @@ compile_kernel less
 *)
 compile_kernel
 esac
-END=$(date +"%s")
-DIFF=$(($END - $START))
-echo -e "$cyarev OwnKernel $okversion for $device Build completed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.$txtrst"
