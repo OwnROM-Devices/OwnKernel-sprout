@@ -83,7 +83,7 @@ echo $nocol
 make sprout_defconfig
 if [ "$1" == "less" ]
 then
-make
+echo $txtrst `make`
 else
 make -j16
 fi
