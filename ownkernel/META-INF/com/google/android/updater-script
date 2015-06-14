@@ -35,6 +35,7 @@ ui_print("acb3322 kmemleak: free internal objects only if there're no leaks to b
 ui_print("06bc6db ext4: don't save the error information if the block device is read-only");
 ui_print("4cc57c7 suspend: Return error when pending wakeup source is found.");
 ui_print("Cherry-picked from Nexus 6 LeanKernel Source");
+ui_print("And many more");
 ui_print("For a proper changelog visit https://github.com/OwnROM-Devices/OwnKernel-sprout/commits/cm-12.1");
 ui_print("Cleaning up");
 delete("/tmp/boot.img");

@@ -17,7 +17,7 @@
 dir=$PWD
 op=$dir/arch/arm/boot/zImage
 okzip=$dir/ownkernel
-okversion="4.4"
+okversion="4.5"
 device="sprout"
 START=$(date +"%s")
 red=$(tput setaf 1)             #  red
