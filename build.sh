@@ -20,40 +20,16 @@ okzip=$dir/ownkernel
 okversion="4.5"
 device="sprout"
 START=$(date +"%s")
-red=$(tput setaf 1)             #  red
-grn=$(tput setaf 2)             #  green
-ylw=$(tput setaf 3)             #  yellow
-blu=$(tput setaf 4)             #  blue
-ppl=$(tput setaf 5)             #  purple
-cya=$(tput setaf 6)             #  cyan
-txtbld=$(tput bold)             #  Bold
-bldred=${txtbld}$(tput setaf 1) #  red
-bldgrn=${txtbld}$(tput setaf 2) #  green
-bldylw=${txtbld}$(tput setaf 3) #  yellow
-bldblu=${txtbld}$(tput setaf 4) #  blue
-bldppl=${txtbld}$(tput setaf 5) #  purple
-bldcya=${txtbld}$(tput setaf 6) #  cyan
-txtrst=$(tput sgr0)             #  Reset
-rev=$(tput rev)                 #  Reverse color
-pplrev=${rev}$(tput setaf 5)
-cyarev=${rev}$(tput setaf 6)
-ylwrev=${rev}$(tput setaf 3)
-blurev=${rev}$(tput setaf 4)
-normal='tput sgr0'
+awesome=$(tput bold)$(tput setaf 6)
 
-# Modify the following variable if you want to build
-if [ "$1" == "uber6" ] || [ "$2" == "uber6" ]
-then
 export CROSS_COMPILE="/home/akhil/android/arm-eabi-6.0/bin/arm-eabi"
-else
-export CROSS_COMPILE="/home/akhil/android/arm-cortex_a7-linux-gnueabihf-linaro_4.9.3-2015.03/bin/arm-cortex_a7-linux-gnueabihf-"
-fi
 export ARCH=arm
 export SUBARCH=arm
+#These too won't work now hehe, but leave them anyway
 export KBUILD_BUILD_USER="akhilnarang"
 export KBUILD_BUILD_HOST="OwnROM"
 
-zip_kernel ()
+function zip_kernel ()
 {
 cp $op $okzip/tools/zImage
 cd $okzip
@@ -61,9 +37,43 @@ zip -r9 ~/android/OwnKernel_$device-$okversion.zip *
 cd $dir
 }
 
+function mka()
+{
+mk_timer schedtool -B -n 1 -e ionice -n 1 make -j$(cat /proc/cpuinfo | grep "^processor" | wc -l) "$@"
+}
+
+function mk_timer()
+{
+    local start_time=$(date +"%s")
+    $@
+    local ret=$?
+    local end_time=$(date +"%s")
+    local tdiff=$(($end_time-$start_time))
+    local hours=$(($tdiff / 3600 ))
+    local mins=$((($tdiff % 3600) / 60))
+    local secs=$(($tdiff % 60))
+    echo
+    if [ $ret -eq 0 ] ; then
+        echo -n -e "#### make completed successfully "
+    else
+        echo -n -e "#### make failed to build some targets "
+    fi
+    if [ $hours -gt 0 ] ; then
+        printf "(%02g:%02g:%02g (hh:mm:ss))" $hours $mins $secs
+    elif [ $mins -gt 0 ] ; then
+        printf "(%02g:%02g (mm:ss))" $mins $secs
+    elif [ $secs -gt 0 ] ; then
+        printf "(%s seconds)" $secs
+    fi
+    echo -e " ####"
+    echo
+    return $ret
+}
+
+
 compile_kernel ()
 {
-echo $cyarev
+echo $awesome
 echo "    )                  )                       ";
 echo " ( /(               ( /(                   (   ";
 echo " )\()) (  (         )\()) (  (           ( )\  ";
@@ -77,18 +87,21 @@ echo $nocol
 make sprout_defconfig
 if [ "$1" == "less" ]
 then
-echo $txtrst `make`
+echo $awesome `make`
+elif [ "$1" == "normal" ]
+then
+echo $awesome `mka`
 else
-make -j16
+make $1
 fi
 END=$(date +"%s")
 DIFF=$(($END - $START))
 if [ -e "$op" ]
 then
-echo -e "$cyarev OwnKernel $okversion for $device Build completed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.$txtrst"
+echo -e "$awesome OwnKernel $okversion for $device Build completed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds."
 zip_kernel
 else
-echo -e "$cyarev OwnKernel $okversion for $device Build Failed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.$txtrst"
+echo -e "$awesome OwnKernel $okversion for $device Build Failed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds."
 fi
 }
 
@@ -111,6 +124,9 @@ compile_kernel
 less)
 compile_kernel less
 ;;
+-j*)
+compile_kernel $1
+;;
 *)
-compile_kernel
+compile_kernel normal
 esac
