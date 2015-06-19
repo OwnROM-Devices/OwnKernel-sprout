@@ -17,12 +17,12 @@
 dir=$PWD
 op=$dir/arch/arm/boot/zImage
 okzip=$dir/ownkernel
-okversion="4.5"
+okversion="4.6"
 device="sprout"
 START=$(date +"%s")
 awesome=$(tput bold)$(tput setaf 6)
 
-export CROSS_COMPILE="/home/akhil/android/arm-eabi-6.0/bin/arm-eabi"
+export CROSS_COMPILE="/home/akhil/android/arm-eabi-6.0/bin/arm-eabi-"
 export ARCH=arm
 export SUBARCH=arm
 #These too won't work now hehe, but leave them anyway
