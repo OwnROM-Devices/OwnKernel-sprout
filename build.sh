@@ -38,6 +38,10 @@ cd $dir
 if [ -e "$final-zip" ] && [ "$release" == "true" ]
 then
 curl --ftp-pasv -T $final-zip ftp://$USER:$PASS@uploads.androidfilehost.com
+else
+echo -e "Error occurred"
+echo -e "Zip not found"
+fi
 }
 
 function mka()
