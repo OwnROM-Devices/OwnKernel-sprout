@@ -27,7 +27,7 @@ awesome=$(tput bold)$(tput setaf 6)
 export CROSS_COMPILE="/home/akhil/android/arm-eabi-6.0/bin/arm-eabi-"
 export ARCH=arm
 export SUBARCH=arm
-export LOCALVERSION="$okversion"
+export LOCALVERSION="-$okversion"
 
 function zip_kernel ()
 {
