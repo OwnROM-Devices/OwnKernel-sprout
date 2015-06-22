@@ -25,9 +25,7 @@ awesome=$(tput bold)$(tput setaf 6)
 export CROSS_COMPILE="/home/akhil/android/arm-eabi-6.0/bin/arm-eabi-"
 export ARCH=arm
 export SUBARCH=arm
-#These too won't work now hehe, but leave them anyway
-export KBUILD_BUILD_USER="akhilnarang"
-export KBUILD_BUILD_HOST="OwnROM"
+export LOCALVERSION="$okversion"
 
 function zip_kernel ()
 {
@@ -87,12 +85,15 @@ echo $nocol
 make sprout_defconfig
 if [ "$1" == "less" ]
 then
-echo $awesome `make`
+make
 elif [ "$1" == "normal" ]
 then
-echo $awesome `mka`
-else
+mka
+elif [ ! "$1" == "" ]
+then
 make $1
+else
+mka
 fi
 END=$(date +"%s")
 DIFF=$(($END - $START))

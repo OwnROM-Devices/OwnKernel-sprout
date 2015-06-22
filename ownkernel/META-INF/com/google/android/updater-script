@@ -18,6 +18,7 @@ ui_print("||			      ||");
 ui_print("||Changelog for OwnKernel 4.6||");
 ui_print("||			      ||");
 ui_print("||===========================||");
+ui_print("||I dont' know");
 ui_print("For a proper changelog visit https://github.com/OwnROM-Devices/OwnKernel-sprout/commits/cm-12.1");
 ui_print("Cleaning up");
 delete("/tmp/boot.img");
