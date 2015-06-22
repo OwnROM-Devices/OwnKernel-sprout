@@ -19,6 +19,8 @@ op=$dir/arch/arm/boot/zImage
 okzip=$dir/ownkernel
 okversion="4.6"
 device="sprout"
+zipname="OwnKernel_$device-$okversion.zip"
+final-zip="/home/akhil/android/$zipname"
 START=$(date +"%s")
 awesome=$(tput bold)$(tput setaf 6)
 
@@ -31,8 +33,11 @@ function zip_kernel ()
 {
 cp $op $okzip/tools/zImage
 cd $okzip
-zip -r9 ~/android/OwnKernel_$device-$okversion.zip *
+zip -r9 $final-zip *
 cd $dir
+if [ -e "$final-zip" ] && [ "$release" == "true" ]
+then
+curl --ftp-pasv -T $final-zip ftp://$USER:$PASS@uploads.androidfilehost.com
 }
 
 function mka()
