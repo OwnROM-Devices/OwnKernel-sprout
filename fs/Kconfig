@@ -274,7 +274,7 @@ config DYNAMIC_FSYNC
 	help
 	  An experimental file sync control using new power_suspend driver
 
-onfig ASYNC_FSYNC
+config ASYNC_FSYNC
 	bool "asynchronous fsync"
 	default y
 
