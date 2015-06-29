@@ -163,6 +163,12 @@ config CPU_FREQ_DEFAULT_GOV_INTELLIACTIVE
 	  loading your cpufreq low-level hardware driver, using the
 	  'interactive' governor for latency-sensitive workloads.
 
+config CPU_FREQ_DEFAULT_GOV_INTERACTIVEX
+  	bool "interactiveX"
+  	select CPU_FREQ_GOV_INTERACTIVEX
+  	help
+    	  Use the CPUFreq governor 'interactiveX' as default.
+
 endchoice
 
 config CPU_FREQ_GOV_PERFORMANCE
@@ -340,6 +346,16 @@ config CPU_FREQ_GOV_INTELLIACTIVE
 	  For details, take a look at linux/Documentation/cpu-freq.
 
 	  If in doubt, say N.
+
+config CPU_FREQ_GOV_INTERACTIVEX
+	tristate "'interactiveX' cpufreq governor"
+	depends on CPU_FREQ
+	help
+	  'interactiveX' - interactive governor with early suspend support added.
+	  
+          This governor uses hotplug to shutdown and start up cpu1 when suspended.
+	  
+          If in doubt, say N.
 
 config GENERIC_CPUFREQ_CPU0
 	tristate "Generic CPU0 cpufreq driver"
