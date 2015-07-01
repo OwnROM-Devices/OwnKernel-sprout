@@ -3,6 +3,8 @@
 /* interface for the pm_qos_power infrastructure of the linux kernel.
  *
  * Mark Gross <mgross@linux.intel.com>
+ *
+ * Copyright (c) 2013-2014, NVIDIA CORPORATION. All rights reserved.
  */
 #include <linux/plist.h>
 #include <linux/notifier.h>
@@ -17,6 +19,13 @@ enum {
 	PM_QOS_CPU_DMA_LATENCY,
 	PM_QOS_NETWORK_LATENCY,
 	PM_QOS_NETWORK_THROUGHPUT,
+	PM_QOS_MIN_ONLINE_CPUS,
+	PM_QOS_MAX_ONLINE_CPUS,
+	PM_QOS_CPU_FREQ_MIN,
+	PM_QOS_CPU_FREQ_MAX,
+	PM_QOS_GPU_FREQ_MIN,
+	PM_QOS_GPU_FREQ_MAX,
+	PM_QOS_EMC_FREQ_MIN,
 
 	/* insert new class ID */
 	PM_QOS_NUM_CLASSES,
@@ -34,6 +43,14 @@ enum pm_qos_flags_status {
 #define PM_QOS_CPU_DMA_LAT_DEFAULT_VALUE	(2000 * USEC_PER_SEC)
 #define PM_QOS_NETWORK_LAT_DEFAULT_VALUE	(2000 * USEC_PER_SEC)
 #define PM_QOS_NETWORK_THROUGHPUT_DEFAULT_VALUE	0
+#define PM_QOS_MIN_ONLINE_CPUS_DEFAULT_VALUE	0
+#define PM_QOS_MAX_ONLINE_CPUS_DEFAULT_VALUE	LONG_MAX
+#define PM_QOS_CPU_FREQ_MIN_DEFAULT_VALUE	0
+#define PM_QOS_CPU_FREQ_MAX_DEFAULT_VALUE	LONG_MAX
+#define PM_QOS_GPU_FREQ_MIN_DEFAULT_VALUE	0
+#define PM_QOS_GPU_FREQ_MAX_DEFAULT_VALUE	LONG_MAX
+#define PM_QOS_EMC_FREQ_MIN_DEFAULT_VALUE	0
+#define PM_QOS_EMC_FREQ_MAX_DEFAULT_VALUE	LONG_MAX
 #define PM_QOS_DEV_LAT_DEFAULT_VALUE		0
 
 #define PM_QOS_FLAG_NO_POWER_OFF	(1 << 0)
@@ -102,6 +119,7 @@ struct pm_qos_constraints {
 struct pm_qos_flags {
 	struct list_head list;
 	s32 effective_flags;	/* Do not change to 64 bit */
+	struct blocking_notifier_head *notifiers;
 };
 
 struct dev_pm_qos {
