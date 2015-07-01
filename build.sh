@@ -17,7 +17,7 @@
 dir=$PWD
 op=$dir/arch/arm/boot/zImage
 okzip=$dir/ownkernel
-okversion="4.7"
+okversion="5.0"
 device="sprout"
 zipname="OwnKernel_$device-$okversion.zip"
 START=$(date +"%s")
