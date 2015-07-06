@@ -169,6 +169,13 @@ config CPU_FREQ_DEFAULT_GOV_INTERACTIVEX
   	help
     	  Use the CPUFreq governor 'interactiveX' as default.
 
+config CPU_FREQ_DEFAULT_GOV_WHEATLEY
+	bool "wheatley"
+	select CPU_FREQ_GOV_WHEATLEY
+	select CPU_FREQ_GOV_PERFORMANCE
+	help
+	  Use the CPUFreq governor 'wheatley' as default.
+
 endchoice
 
 config CPU_FREQ_GOV_PERFORMANCE
@@ -355,6 +362,17 @@ config CPU_FREQ_GOV_INTERACTIVEX
 	  
           This governor uses hotplug to shutdown and start up cpu1 when suspended.
 	  
+          If in doubt, say N.
+
+config CPU_FREQ_GOV_WHEATLEY
+	tristate "'wheatley' cpufreq governor"
+	depends on CPU_FREQ
+	help
+          'cpufreq_wheatley' - A dynamic cpufreq governor for 
+          Low Latency Frequency Transition capable processors
+
+          For details, take a look at linux/Documentation/cpu-freq.
+
           If in doubt, say N.
 
 config GENERIC_CPUFREQ_CPU0
