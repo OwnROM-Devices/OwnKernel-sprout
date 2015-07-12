@@ -238,13 +238,13 @@ static __ref void max_screenoff(bool screenoff)
 }
 
 /* On suspend put offline all cores except cpu0*/
-static __ref void dyn_lcd_early_suspend(struct work_struct *work)
+static void dyn_lcd_early_suspend(struct work_struct *work)
 {	
 	max_screenoff(true);
 }
 
 /* On resume bring online CPUs until max_online to prevent lags */
-static __ref void dyn_lcd_late_resume(struct work_struct *work)
+static void dyn_lcd_late_resume(struct work_struct *work)
 {
 	max_screenoff(false);
 }
@@ -362,7 +362,7 @@ static struct kernel_param_ops max_cores_screenoff_ops = {
 module_param_cb(max_cores_screenoff, &max_cores_screenoff_ops, &max_cores_screenoff, 0644);
 
 /* max_freq_screenoff */
-static __ref int set_max_freq_screenoff(const char *val, const struct kernel_param *kp)
+static int set_max_freq_screenoff(const char *val, const struct kernel_param *kp)
 {
 	int ret = MAX_FREQ_SCREENOFF;
 	unsigned int i;
