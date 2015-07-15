@@ -68,3 +68,4 @@ KBUILD_AFLAGS	:=$(KBUILD_AFLAGS:-msoft-float=-Wa,-mfpu=neon)
 obj-y += $(ARCH_MTK_PROJECT)/
 
 obj-y += mako_hotplug.o
+obj-y += alucard_hotplug.o
