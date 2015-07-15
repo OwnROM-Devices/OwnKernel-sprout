@@ -1,6 +1,7 @@
  #
  # Copyright © 2015, Akhil Narang "akhilnarang" <akhilnarang.1999@gmail.com>
- #
+ # Original by Varun Chitre
+ # Heavily modified by Akhil :P
  # Custom build script for OwnKernel
  #
  # This software is licensed under the terms of the GNU General Public
@@ -17,68 +18,50 @@
 dir=$PWD
 op=$dir/arch/arm/boot/zImage
 okzip=$dir/ownkernel
-okversion="5.1"
+okversion="5.2"
 device="sprout"
 zipname="OwnKernel_$device-$okversion.zip"
 START=$(date +"%s")
 awesome=$(tput bold)$(tput setaf 6)
 
-export CROSS_COMPILE="/home/akhil/android/arm-eabi-6.0/bin/arm-eabi-"
+export CROSS_COMPILE="/home/akhilnarang/android/arm-eabi-6.0/bin/arm-eabi-"
 export ARCH=arm
 export SUBARCH=arm
-export LOCALVERSION="-$okversion"
+export LOCALVERSION="-OwnKernel-$okversion"
 
 function zip_kernel ()
 {
 cp $op $okzip/tools/zImage
 cd $okzip
-zip -r9 ~/android/$zipname *
+zip -r9 /home/akhilnarang/android/$zipname *
 cd $dir
-cd ~/android
+cd /home/akhilnarang/android
 if [ -e "$zipname" ]
 then
-curl --ftp-pasv -T $zipname ftp://$AFH_USER:$AFH_PASS@uploads.androidfilehost.com
+while read -p "Do you want to upload zip (y/n)? " uchoice
+		do
+		case "$uchoice" in
+		        y|Y )
+		                upload $zipname Sprout/OwnKernel
+		                break
+		                ;;
+		        n|N )
+		                break
+		                ;;
+		        * )
+		                echo
+		                echo "Invalid try again!"
+		                echo
+		                ;;
+		esac
+		done
 else
 echo -e "Error occurred"
 echo -e "Zip not found"
 fi
 }
 
-function mka()
-{
-mk_timer schedtool -B -n 1 -e ionice -n 1 make -j$(cat /proc/cpuinfo | grep "^processor" | wc -l) "$@"
-}
-
-function mk_timer()
-{
-    local start_time=$(date +"%s")
-    $@
-    local ret=$?
-    local end_time=$(date +"%s")
-    local tdiff=$(($end_time-$start_time))
-    local hours=$(($tdiff / 3600 ))
-    local mins=$((($tdiff % 3600) / 60))
-    local secs=$(($tdiff % 60))
-    echo
-    if [ $ret -eq 0 ] ; then
-        echo -n -e "#### make completed successfully "
-    else
-        echo -n -e "#### make failed to build some targets "
-    fi
-    if [ $hours -gt 0 ] ; then
-        printf "(%02g:%02g:%02g (hh:mm:ss))" $hours $mins $secs
-    elif [ $mins -gt 0 ] ; then
-        printf "(%02g:%02g (mm:ss))" $mins $secs
-    elif [ $secs -gt 0 ] ; then
-        printf "(%s seconds)" $secs
-    fi
-    echo -e " ####"
-    echo
-    return $ret
-}
-
-
-compile_kernel ()
+function compile_kernel ()
 {
 echo $awesome
 echo "    )                  )                       ";
@@ -92,18 +75,7 @@ echo " \___/ \_/\_/|_||_|_|\_\___||_| |_||_|\___|_|  ";
 echo "                                               ";
 echo $nocol
 make sprout_defconfig
-if [ "$1" == "less" ]
-then
-make
-elif [ "$1" == "normal" ]
-then
-mka
-elif [ ! "$1" == "" ]
-then
-make $1
-else
-mka
-fi
+make -j8
 END=$(date +"%s")
 DIFF=$(($END - $START))
 if [ -e "$op" ]
@@ -131,12 +103,6 @@ make clean mrproper
 rm -f include/linux/autoconf.h
 compile_kernel
 ;;
-less)
-compile_kernel less
-;;
--j*)
-compile_kernel $1
-;;
 *)
-compile_kernel normal
+compile_kernel
 esac
