@@ -18,16 +18,16 @@
 dir=$PWD
 op=$dir/arch/arm/boot/zImage
 okzip=$dir/ownkernel
-okversion="5.4"
+okversion="5.5"
 device="sprout"
 zipname="OwnKernel_$device-$okversion.zip"
 START=$(date +"%s")
 awesome=$(tput bold)$(tput setaf 6)
-
+config="$device_defconfig"
 export CROSS_COMPILE="/home/akhilnarang/android/arm-eabi-6.0/bin/arm-eabi-"
 export ARCH=arm
 export SUBARCH=arm
-export LOCALVERSION="-OwnKernel-$okversion"
+export LOCALVERSION="-$okversion"
 
 function zip_kernel ()
 {
@@ -59,6 +59,7 @@ else
 echo -e "Error occurred"
 echo -e "Zip not found"
 fi
+cd $dir
 }
 
 function compile_kernel ()
@@ -74,7 +75,7 @@ echo "| (_) \ V  V / ' \))' </ -_)| '_| ' \)) -_) |  ";
 echo " \___/ \_/\_/|_||_|_|\_\___||_| |_||_|\___|_|  ";
 echo "                                               ";
 echo $nocol
-make sprout_defconfig
+make $config
 make -j8
 END=$(date +"%s")
 DIFF=$(($END - $START))
