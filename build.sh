@@ -41,10 +41,13 @@ then
 while read -p "Do you want to upload zip (y/n)? " uchoice
 		do
 		case "$uchoice" in
-		        y|Y )
-		                upload $zipname Sprout/OwnKernel
+		        ysf|YSF)
+		                upload-sf $zipname Sprout/OwnKernel
 		                break
 		                ;;
+			ybb|YBB)
+				upload-bb $zipname OwnKernel/sprout/
+				;;
 		        n|N )
 		                break
 		                ;;
