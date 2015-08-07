@@ -4,15 +4,8 @@ obj-$(CONFIG_MTK_ECCCI_DRIVER) := ccci.o
 
 ccflags-y += -I$(srctree)/drivers/misc/mediatek/eccci/$(MTK_PLATFORM)
 ifeq ($(CONFIG_ARCH_MT6290), y)
-$(warning ECCCI core compiling for MT6290 CLDMA mode)
 	ccflags-y += -I$(srctree)/drivers/eccci_p/
 	ccflags-y += -DMT6290
-else
-	ifneq ($(CONFIG_MTK_ECCCI_UT), y)
-$(warning ECCCI core compiling for MT65XX CLDMA mode)
-	else
-$(warning ECCCI core compiling for UT mode)
-	endif
 endif
 
 ifeq ($(CONFIG_MTK_SECURITY_SW_SUPPORT), y)

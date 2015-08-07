@@ -1,5 +1,5 @@
  #
- # Copyright © 2015, Akhil Narang "akhilnarang" <akhilnarang.1999@gmail.com>
+ # Copyright ï¿½ 2015, Akhil Narang "akhilnarang" <akhilnarang.1999@gmail.com>
  # Original by Varun Chitre
  # Heavily modified by Akhil :P
  # Custom build script for OwnKernel
@@ -18,7 +18,7 @@
 dir=$PWD
 op=$dir/arch/arm/boot/zImage
 okzip=$dir/ownkernel
-okversion="5.5"
+okversion="6.0"
 device="sprout"
 zipname="OwnKernel_$device-$okversion.zip"
 START=$(date +"%s")
@@ -27,7 +27,7 @@ config=$device"_defconfig"
 export CROSS_COMPILE="/home/akhilnarang/android/arm-eabi-6.0/bin/arm-eabi-"
 export ARCH=arm
 export SUBARCH=arm
-export LOCALVERSION="-$okversion"
+export LOCALVERSION="-OwnKernel-$okversion"
 
 function zip_kernel ()
 {
@@ -41,14 +41,11 @@ then
 while read -p "Do you want to upload zip (y/n)? " uchoice
 		do
 		case "$uchoice" in
-		        ysf|YSF)
+		        y|Y)
 		                upload-sf $zipname Sprout/OwnKernel
 		                break
 		                ;;
-			ybb|YBB)
-				upload-bb $zipname OwnKernel/sprout/
-				;;
-		        n|N )
+			      n|N )
 		                break
 		                ;;
 		        * )
