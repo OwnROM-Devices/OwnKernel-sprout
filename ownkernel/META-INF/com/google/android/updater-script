@@ -15,6 +15,7 @@ ui_print("						 ");
 run_program("/tmp/flash_kernel.sh");
 ui_print("Flashed");
 ui_print("Has linux kernel 3.10.85");
+ui_print("SELinux Permissive So AOSP ROMs don't have problems after disconnecting call");
 ui_print("Based on latest source from Google :D");
 ui_print("Delay in waking up fixed");
 ui_print("All tweaks added to Radium-Kernel added here");
