@@ -18,13 +18,13 @@
 dir=$PWD
 op=$dir/arch/arm/boot/zImage
 okzip=$dir/ownkernel
-okversion="6.1"
+okversion="6.4"
 device="sprout"
 zipname="OwnKernel_$device-$okversion.zip"
 START=$(date +"%s")
 awesome=$(tput bold)$(tput setaf 6)
 config=$device"_defconfig"
-export CROSS_COMPILE="/home/akhilnarang/android/arm-eabi-6.0/bin/arm-eabi-"
+export CROSS_COMPILE="/home/akhilnarang/android/Toolchain/bin/arm-architoolchain-linux-gnueabihf-"
 export ARCH=arm
 export SUBARCH=arm
 export LOCALVERSION="-OwnKernel-$okversion"
@@ -42,7 +42,7 @@ while read -p "Do you want to upload zip (y/n)? " uchoice
 		do
 		case "$uchoice" in
 		        y|Y)
-		                upload-sf $zipname Sprout/OwnKernel
+		                upload-sf $zipname ownrom/sprout/OwnKernel
 		                break
 		                ;;
 			      n|N )
