@@ -195,7 +195,7 @@ SUBARCH := $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
 #ARCH		?= $(SUBARCH)
 #CROSS_COMPILE	?= $(CONFIG_CROSS_COMPILE:"%"=%)
 ARCH		:= arm
-CROSS_COMPILE	:= /home/akhilnarang/android/Toolchain/bin/arm-architoolchain-linux-gnueabihf-
+CROSS_COMPILE	:= /home/akhilnarang/UBERTC/out/arm-eabi-5.2-cortex-a7/bin/arm-eabi-
 
 # Architecture as present in compile.h
 UTS_MACHINE 	:= $(ARCH)
@@ -243,8 +243,8 @@ CONFIG_SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
 
 HOSTCC       = ccache gcc
 HOSTCXX      = g++
-HOSTCFLAGS   = -Wall -Wmissing-prototypes -Wstrict-prototypes -Ofast -pipe -DNDEBUG -floop-nest-optimize -fgraphite -fgraphite-identity -floop-flatten -floop-parallelize-all -ftree-loop-linear -floop-interchange -floop-strip-mine -floop-block -fomit-frame-pointer -std=gnu89
-HOSTCXXFLAGS = -pipe -DNDEBUG -Ofast -floop-nest-optimize -fgraphite -fgraphite-identity -floop-flatten -floop-parallelize-all -ftree-loop-linear -floop-interchange -floop-strip-mine -floop-block
+HOSTCFLAGS   = -Wall -Wmissing-prototypes -Wstrict-prototypes -O3 -pipe -DNDEBUG -floop-nest-optimize -fgraphite -fgraphite-identity -floop-flatten -floop-parallelize-all -ftree-loop-linear -floop-interchange -floop-strip-mine -floop-block -fomit-frame-pointer -std=gnu89
+HOSTCXXFLAGS = -pipe -DNDEBUG -O3 -floop-nest-optimize -fgraphite -fgraphite-identity -floop-flatten -floop-parallelize-all -ftree-loop-linear -floop-interchange -floop-strip-mine -floop-block
 
 # Decide whether to build built-in, modular, or both.
 # Normally, just do built-in.
@@ -329,7 +329,7 @@ include $(srctree)/scripts/Kbuild.include
 AS		= $(CROSS_COMPILE)as
 LD		= $(CROSS_COMPILE)ld
 CC		= ccache $(CROSS_COMPILE)gcc
-CC		+= -Ofast
+CC		+= -O3
 CPP		= $(CC) -E
 AR		= $(CROSS_COMPILE)ar
 NM		= $(CROSS_COMPILE)nm
@@ -346,7 +346,7 @@ CHECK		= sparse
 CHECKFLAGS     := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ \
 		  -Wbitwise -Wno-return-void $(CF)
 
-KERNEL_FLAGS	= -pipe -DNDEBUG -Ofast -mtune=cortex-a7 -mcpu=cortex-a7 -marm -ftree-vectorize -ftree-loop-ivcanon -fmodulo-sched -fmodulo-sched-allow-regmoves -mvectorize-with-neon-quad -munaligned-access -fsingle-precision-constant -fpredictive-commoning -floop-nest-optimize -fgraphite -fgraphite-identity -floop-parallelize-all -ftree-loop-linear -ftree-loop-im -floop-interchange -floop-strip-mine -floop-block -floop-flatten -std=gnu89
+KERNEL_FLAGS	= -pipe -DNDEBUG -O3 -mtune=cortex-a7 -mcpu=cortex-a7 -marm -ftree-vectorize -ftree-loop-ivcanon -fmodulo-sched -fmodulo-sched-allow-regmoves -mvectorize-with-neon-quad -munaligned-access -fsingle-precision-constant -fpredictive-commoning -floop-nest-optimize -fgraphite -fgraphite-identity -floop-parallelize-all -ftree-loop-linear -ftree-loop-im -floop-interchange -floop-strip-mine -floop-block -floop-flatten -std=gnu89
 MOD_FLAGS	= -DMODULE $(KERNEL_FLAGS) 
 CFLAGS_MODULE   = $(MOD_FLAGS)
 AFLAGS_MODULE   = $(MOD_FLAGS)
@@ -595,7 +595,7 @@ all: vmlinux
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
 KBUILD_CFLAGS	+= -Os $(call cc-disable-warning,maybe-uninitialized,)
 else
-KBUILD_CFLAGS	+= -Ofast
+KBUILD_CFLAGS	+= -O3
 endif
 
 include $(srctree)/arch/$(SRCARCH)/Makefile
