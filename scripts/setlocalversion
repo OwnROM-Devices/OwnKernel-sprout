@@ -172,4 +172,4 @@ else
 	fi
 fi
 
-echo "-OwnKernel-6.4"
+echo "-OwnKernel-6.5"
