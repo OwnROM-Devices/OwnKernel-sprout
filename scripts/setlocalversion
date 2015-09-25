@@ -172,4 +172,4 @@ else
 	fi
 fi
 
-echo "-OwnKernel-6.5"
+echo "$LOCALVERSION"
