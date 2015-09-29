@@ -16,7 +16,6 @@
  # Please maintain this if you use this script or any part of it
  #
 dir=$PWD
-op=$dir/arch/arm/boot/zImage
 okzip=$dir/ownkernel
 okversion="6.5-$(date +%Y%m%d)"
 device="sprout"
@@ -24,18 +23,31 @@ zipname="OwnKernel_$device-$okversion.zip"
 START=$(date +"%s")
 awesome=$(tput bold)$(tput setaf 6)
 config=$device"_defconfig"
-export CROSS_COMPILE="/home/akhilnarang/android/arm-eabi-4.9-cortex-a7/bin/arm-eabi-"
+export CROSS_COMPILE="/home/akhilnarang/UBERTC/out/arm-eabi-5.2-cortex-a7/bin/arm-eabi-"
 export ARCH=arm
 export SUBARCH=arm
 export LOCALVERSION="-OwnKernel-$okversion"
+export OUT="/home/akhilnarang/android"
+export OUT_DIR="/tmp/OwnKernel-$device"
+op=$OUT_DIR/arch/arm/boot/zImage
+
+function cout()
+{
+cd $OUT
+}
+
+function croot()
+{
+cd $dir
+}
 
 function zip_kernel ()
 {
 cp $op $okzip/tools/zImage
 cd $okzip
-zip -r9 /home/akhilnarang/android/$zipname *
+zip -r9 $OUT/$zipname *
 cd $dir
-cd /home/akhilnarang/android
+cout
 if [ -e "$zipname" ]
 then
 while read -p "Do you want to upload zip (y/n)? " uchoice
@@ -59,7 +71,7 @@ else
 echo -e "Error occurred"
 echo -e "Zip not found"
 fi
-cd $dir
+croot
 }
 
 function compile_kernel ()
@@ -75,8 +87,9 @@ echo "| (_) \ V  V / ' \))' </ -_)| '_| ' \)) -_) |  ";
 echo " \___/ \_/\_/|_||_|_|\_\___||_| |_||_|\___|_|  ";
 echo "                                               ";
 echo $nocol
-make $config
-make -j8
+mount -t tmpfs -o size=2048M tmpfs /tmp/OwnKernel-sprout
+make $config O=$OUT_DIR
+make -j16 O=$OUT_DIR
 END=$(date +"%s")
 DIFF=$(($END - $START))
 if [ -e "$op" ]
@@ -86,22 +99,32 @@ zip_kernel
 else
 echo -e "$awesome OwnKernel $okversion for $device Build Failed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds."
 fi
+umount /tmp/OwnKernel-sprout
+}
+
+function out_tmp_clean()
+{
+rm -rf $OUT_DIR
+mkdir -p $OUT_DIR
 }
 
 case $1 in
 clean)
-make clean
+make clean O=$OUT_DIR
 rm -f include/linux/autoconf.h
+out_tmp_clean
 ;;
 mrproper)
-make mrproper
+make mrproper O=$OUT_DIR
+out_tmp_clean
 ;;
 menu|menuconfig)
 make sprout_defconfig menuconfig
 ;;
 cleanbuild)
-make clean mrproper
+make clean mrproper O=$OUT_DIR
 rm -f include/linux/autoconf.h
+out_tmp_clean
 compile_kernel
 ;;
 *)
