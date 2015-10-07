@@ -87,7 +87,6 @@ echo "| (_) \ V  V / ' \))' </ -_)| '_| ' \)) -_) |  ";
 echo " \___/ \_/\_/|_||_|_|\_\___||_| |_||_|\___|_|  ";
 echo "                                               ";
 echo $nocol
-mount -t tmpfs -o size=2048M tmpfs /tmp/OwnKernel-sprout
 make $config O=$OUT_DIR
 make -j16 O=$OUT_DIR
 END=$(date +"%s")
@@ -99,7 +98,6 @@ zip_kernel
 else
 echo -e "$awesome OwnKernel $okversion for $device Build Failed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds."
 fi
-umount /tmp/OwnKernel-sprout
 }
 
 function out_tmp_clean()
@@ -107,7 +105,7 @@ function out_tmp_clean()
 rm -rf $OUT_DIR
 mkdir -p $OUT_DIR
 }
-
+mount -t tmpfs -o size=2048M tmpfs /tmp/OwnKernel-sprout
 case $1 in
 clean)
 make clean O=$OUT_DIR
@@ -130,3 +128,4 @@ compile_kernel
 *)
 compile_kernel
 esac
+umount /tmp/OwnKernel-sprout
